@@ -44,9 +44,9 @@ time_list = [8, 10, 13, 15, 17, 19, 21]
 set_push = [True, True, True, True, True, True, True]
 
 # 最小步数（如果只需要刷步的次数少于7次就将该次数以后的步数全都改成0，如：time_list[3]: 0，表示第五次开始不运行或者直接云函数触发里面不在该时间调用均可（建议用后者））
-min_dict = {time_list[0]: 3000, time_list[1]: 4100, time_list[2]: 5100, time_list[3]: 8000, time_list[4]: 10100, time_list[5]: 12100, time_list[6]: 15100}
+min_dict = {time_list[0]: 6000, time_list[1]: 10000, time_list[2]: 12000, time_list[3]: 14000, time_list[4]: 16000, time_list[5]: 18000, time_list[6]: 19100}
 # 最大步数（例如现在设置意思是在8点（你设置的第一个时间点默认8）运行会在1500到2999中随机生成一个数提交（开启气候降低步数会乘系数K）10点3000~4999。。。以此类推，步数范围建议看懂了再改，没看懂直接默认就好）
-max_dict = {time_list[0]: 4000, time_list[1]: 5000, time_list[2]: 6000, time_list[3]: 10000, time_list[4]: 12000, time_list[5]: 15000, time_list[6]: 24000}
+max_dict = {time_list[0]: 9999, time_list[1]: 11000, time_list[2]: 13000, time_list[3]: 15000, time_list[4]: 17000, time_list[5]: 19000, time_list[6]: 20000}
 # 设置结束
 #now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 # 北京时间
@@ -62,29 +62,29 @@ def getWeather():
         return
     else:
         global K, type
-        url = 'http://wthrcdn.etouch.cn/weather_mini?city=' + area
+        url = 'http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&needMoreData=true&pageNo=1&pageSize=7&city='+ area
         hea = {'User-Agent': 'Mozilla/5.0'}
         r = requests.get(url=url, headers=hea)
         if r.status_code == 200:
             result = r.text
             res = json.loads(result)
-            if "多云" in res['data']['forecast'][0]['type']:
+            if "多云" in res['data']['list'][0]['weather']:
                 K = K_dict["多云"]
-            elif "阴" in res['data']['forecast'][0]['type']:
+            elif "阴" in res['data']['list'][0]['weather']:
                 K = K_dict["阴"]
-            elif "小雨" in res['data']['forecast'][0]['type']:
+            elif "小雨" in res['data']['list'][0]['weather']:
                 K = K_dict["小雨"]
-            elif "中雨" in res['data']['forecast'][0]['type']:
+            elif "中雨" in res['data']['list'][0]['weather']:
                 K = K_dict["中雨"]
-            elif "大雨" in res['data']['forecast'][0]['type']:
+            elif "大雨" in res['data']['list'][0]['weather']:
                 K = K_dict["大雨"]
-            elif "暴雨" in res['data']['forecast'][0]['type']:
+            elif "暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["暴雨"]
-            elif "大暴雨" in res['data']['forecast'][0]['type']:
+            elif "大暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["大暴雨"]
-            elif "特大暴雨" in res['data']['forecast'][0]['type']:
+            elif "特大暴雨" in res['data']['list'][0]['weather']:
                 K = K_dict["特大暴雨"]
-            type = res['data']['forecast'][0]['type']
+            type = res['data']['list'][0]['weather']
         else:
             print("获取天气情况出错")
 
